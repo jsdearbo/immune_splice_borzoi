@@ -1,0 +1,72 @@
+# =============================================================================
+# OPTUNA CANDIDATE 1 — Trial 24 (Best 4-metric composite)
+# =============================================================================
+
+project: "20260511_all_models"
+name: "multitask_locon_v1"
+
+target_tsv_base_path: "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/data_labeling/results/labelled_data/multitask_balanced"
+
+cell_types: ["B_Cell", "Macrophage", "T_Cell"]
+
+model_params:
+  model_type: "BorzoiModel"
+  use_lora: True
+  nonlinear_head: True
+  split_head: True
+  conditional_head: False
+  head_hidden: 256
+  task_hidden: 512
+  lora_rank: 8
+  conv_select: 4      # Locon on last 4 conv blocks (paper's best config)
+  locon_rank: 4       # paper default
+  locon_alpha: 1.0    # scale = alpha/rank = 0.25
+  crop_len: 5120
+  final_pool_func: "identity"
+  final_act_func: "linear"
+
+train_params:
+  task: "multilabel"
+  loss: "strongpsiloss"
+  optimizer: "adamw"
+  batch_size: 2
+  max_epochs: 30
+  devices: [1]          # Single GPU to match Optuna tuning conditions (HP searched on 1 GPU)
+  accelerator: "gpu"
+  precision: "bf16-mixed"
+  final_pool_func: "identity"
+  final_act_func: "linear"
+  num_workers: 16
+
+  # --- Optuna-optimised hyperparameters (Trial 24) ---
+  # Note: HPs were tuned on 1 GPU with max_epochs=3 + cosine_decay.
+  # cosine_decay calibrates to estimated_stepping_batches (all epochs), so
+  # max_epochs=30 gives a much slower decay than the Optuna 3-epoch run.
+  # If using 2 GPUs, scale lr and head_lr by 2x (linear scaling rule).
+  lr: 6.5e-06
+  head_lr: 1.25e-04
+  weight_decay: 5.5e-05
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  warmup_steps: 350
+  clip: 0.25
+  cosine_decay: true
+  cosine_T_epochs: 3    # LR decays to min_lr_ratio over 3 epochs (matching Optuna tuning period),
+                        # then stays fixed at min_lr_ratio. Training continues via early stopping.
+  early_stopping_patience: 5
+
+  loss_params:
+    psi_params:
+      lambda_mid: 25
+      alpha_cell: 3.15
+      beta_profile: 0.0165
+      gamma_pointwise: 0.0
+      eps: 1e-6
+      use_mask: True
+      pointwise_mode: logit
+
+  checkpoint:
+    monitor: "val_cell_loss"   # match Optuna optimization objective
+    mode: "min"
+    save_last: true
+    save_top_k: 1

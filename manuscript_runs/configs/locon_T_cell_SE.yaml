@@ -1,0 +1,39 @@
+experiment_dir: "/mnt/data_sda/jdearborn/scratch/JD_build/interpretation/attribution/runs/locon_T_cell_SE"
+coord_file_path: "/mnt/data_sda/jdearborn/scratch/JD_build/interpretation/attribution/runs/locon_T_cell_SE/events.csv"
+species: "mouse"
+model_selection: "fine_tuned"
+checkpoint_path: "/mnt/data_sda/jdearborn/scratch/T_and_B_cells/experiments/20260511_single_cell_types_locon4/T_cell/checkpoints/epoch=0-step=4363.ckpt"
+centering_mode: "element_only"
+attr_respect_to: "element_only"
+attribution_method: "inputxgradient"
+name_col: "unique_ID"
+
+mask_mode: "element_only"
+flank: [100]
+modisco_len: 1000
+groupby_column: "psi_bin"
+
+enrichment:
+  run_sea: false
+  run_fimo: true
+  source_subset: "all_seqs_modisco"
+  source_flank: "masked_100bp_flank"
+  comparisons:
+    - {primary: "high_psi",         control: "low_psi"}
+    - {primary: "intermediate_psi", control: "low_psi"}
+    - {primary: "high_psi",         control: "intermediate_psi"}
+    - {primary: "high_psi",         control: "rest"}
+    - {primary: "intermediate_psi", control: "rest"}
+    - {primary: "low_psi",          control: "rest"}
+
+dedupe_overlaps: true
+task_id: ""
+genome_name: "/mnt/data_sda/jdearborn/genomes/mouse/mm10/fasta/GRCm38.primary_assembly.genome.fa"
+
+motif_mapping:
+  bigwig_dir: "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/results/merged_bw/by_cell_type/T_Cell"
+  gtf_file: "/mnt/data_sda/jdearborn/genomes/mouse/mm10/gtf/gencode.vM23.annotation.gtf"
+  flank: 100
+  modisco_window: 1000
+  attr_respect_to: "element_only"
+  y_scale: "log1p"

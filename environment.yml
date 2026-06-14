@@ -1,0 +1,39 @@
+name: immune-splice-borzoi
+channels:
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - bedtools>=2.30
+  - pip
+  - pip:
+    # Deep learning
+    - torch==2.6.0
+    - pytorch-lightning==2.4.0
+    - peft==0.17.1
+    # gReLU (custom fork — includes Borzoi and training utilities)
+    - git+https://github.com/jsdearbo/edit_gReLU.git
+    # Bioinformatics
+    - h5py==3.12.1
+    - pyBigWig==0.3.23
+    - pysam==0.22.1
+    - genomepy==0.16.1
+    # Data science
+    - numpy==1.26.4
+    - pandas==3.0.1
+    - scipy==1.14.1
+    - scikit-learn==1.8.0
+    # UMAP
+    - umap-learn==0.5.11
+    # Visualization
+    - matplotlib==3.9.2
+    - seaborn==0.13.2
+    - logomaker==0.8
+    - adjusttext==1.3.0
+    # Motif scanning
+    - tangermeme==0.4.2
+    # Utilities
+    - pyyaml==6.0.2
+    - tqdm==4.67.0
+    - wandb==0.18.7

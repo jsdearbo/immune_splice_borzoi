@@ -1,0 +1,75 @@
+# =============================================================================
+# OPTUNA CANDIDATE 3 — Trial 47 (Highest Pearson, best cell loss)
+#
+#   val_pearson:   0.7375  (near-best overall)
+#   val_bce_loss:  2.9218
+#   val_cell_loss: 0.968199
+#   Composite rank: #3
+#
+# Key difference: highest lambda_mid (35.26), warmup=100.
+# This trial achieved the best cell_loss among the top-3 while
+# keeping very high Pearson — potentially the best for head collapse.
+# =============================================================================
+
+project: "20260511_all_models"
+name: "T_cell_locon_v1"
+
+target_tsv_base_path: "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/data_labeling/results/labelled_data/single_cell_type_datasets/multitask_balanced/T_Cell"
+
+cell_types: ["T_Cell"]
+
+model_params:
+  model_type: "BorzoiModel"
+  use_lora: True
+  nonlinear_head: True
+  split_head: True
+  conditional_head: False
+  head_hidden: 256
+  task_hidden: 512
+  lora_rank: 8
+  conv_select: 4      # Locon on last 4 conv blocks (paper's best config)
+  locon_rank: 4       # paper default
+  locon_alpha: 1.0    # scale = alpha/rank = 0.25
+  crop_len: 5120
+  final_pool_func: "identity"
+  final_act_func: "linear"
+
+train_params:
+  task: "multilabel"
+  loss: "strongpsiloss"
+  optimizer: "adamw"
+  batch_size: 2
+  max_epochs: 10
+  devices: [0, 1]
+  accelerator: "gpu"
+  precision: "bf16-mixed"
+  final_pool_func: "identity"
+  final_act_func: "linear"
+  num_workers: 16
+
+  # --- Optuna-optimised hyperparameters (Trial 8) ---
+  lr: 4.5e-5
+  head_lr: 3e-4
+  weight_decay: 1.67e-6
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  warmup_steps: 350
+  clip: 0.25
+  cosine_decay: true
+  early_stopping_patience: 3
+
+  loss_params:
+    psi_params:
+      lambda_mid: 10.2
+      alpha_cell: 0.0
+      beta_profile: 0.018
+      gamma_pointwise: 0.8
+      eps: 1e-6
+      use_mask: True
+      pointwise_mode: logit
+
+  checkpoint:
+    monitor: "val_loss"
+    mode: "min"
+    save_last: true
+    save_top_k: 1
