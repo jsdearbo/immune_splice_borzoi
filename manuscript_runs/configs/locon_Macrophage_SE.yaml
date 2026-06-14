@@ -1,8 +1,8 @@
-experiment_dir: "/mnt/data_sda/jdearborn/scratch/JD_build/interpretation/attribution/runs/locon_Macrophage_SE"
-coord_file_path: "/mnt/data_sda/jdearborn/scratch/JD_build/interpretation/attribution/runs/locon_Macrophage_SE/events.csv"
+experiment_dir: "/mnt/data_sda/jdearborn/scratch/JD_build/interpretation/attribution/runs/locon_Macrophage_SE"  # /path/to/attribution_runs/locon_Macrophage_SE
+coord_file_path: "/mnt/data_sda/jdearborn/scratch/JD_build/interpretation/attribution/runs/locon_Macrophage_SE/events.csv"  # or: manuscript_runs/event_tables/Macrophage_SE_events.csv
 species: "mouse"
 model_selection: "fine_tuned"
-checkpoint_path: "/mnt/data_sda/jdearborn/scratch/T_and_B_cells/experiments/20260511_single_cell_types_locon4/Macrophage/checkpoints/epoch=3-step=17452.ckpt"
+checkpoint_path: "/mnt/data_sda/jdearborn/scratch/T_and_B_cells/experiments/20260511_single_cell_types_locon4/Macrophage/checkpoints/epoch=3-step=17452.ckpt"  # /path/to/checkpoints/Macrophage_locon_v1.ckpt (download from Zenodo)
 centering_mode: "element_only"
 attr_respect_to: "element_only"
 attribution_method: "inputxgradient"
@@ -28,11 +28,11 @@ enrichment:
 
 dedupe_overlaps: true
 task_id: ""
-genome_name: "/mnt/data_sda/jdearborn/genomes/mouse/mm10/fasta/GRCm38.primary_assembly.genome.fa"
+genome_name: "/mnt/data_sda/jdearborn/genomes/mouse/mm10/fasta/GRCm38.primary_assembly.genome.fa"  # /path/to/mm10/fasta/GRCm38.primary_assembly.genome.fa
 
 motif_mapping:
-  bigwig_dir: "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/results/merged_bw/by_cell_type/Macrophage"
-  gtf_file: "/mnt/data_sda/jdearborn/genomes/mouse/mm10/gtf/gencode.vM23.annotation.gtf"
+  bigwig_dir: "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/results/merged_bw/by_cell_type/Macrophage"  # /path/to/merged_bw/by_cell_type/Macrophage
+  gtf_file: "/mnt/data_sda/jdearborn/genomes/mouse/mm10/gtf/gencode.vM23.annotation.gtf"  # /path/to/mm10/gtf/gencode.vM23.annotation.gtf
   flank: 100
   modisco_window: 1000
   attr_respect_to: "element_only"

@@ -14,7 +14,7 @@
 project: "20260511_all_models"
 name: "Macrophage_locon_v1"
 
-target_tsv_base_path: "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/data_labeling/results/labelled_data/single_cell_type_datasets/multitask_balanced/Macrophage"
+target_tsv_base_path: "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/data_labeling/results/labelled_data/single_cell_type_datasets/multitask_balanced/Macrophage"  # /path/to/labelled_data/single_cell_type_datasets/multitask_balanced/Macrophage
 
 cell_types: ["Macrophage"]
 

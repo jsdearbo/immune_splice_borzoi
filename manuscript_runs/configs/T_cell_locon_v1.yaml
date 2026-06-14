@@ -14,7 +14,7 @@
 project: "20260511_all_models"
 name: "T_cell_locon_v1"
 
-target_tsv_base_path: "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/data_labeling/results/labelled_data/single_cell_type_datasets/multitask_balanced/T_Cell"
+target_tsv_base_path: "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/data_labeling/results/labelled_data/single_cell_type_datasets/multitask_balanced/T_Cell"  # /path/to/labelled_data/single_cell_type_datasets/multitask_balanced/T_Cell
 
 cell_types: ["T_Cell"]
 

@@ -5,7 +5,7 @@
 project: "20260511_all_models"
 name: "multitask_locon_v1"
 
-target_tsv_base_path: "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/data_labeling/results/labelled_data/multitask_balanced"
+target_tsv_base_path: "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/data_labeling/results/labelled_data/multitask_balanced"  # /path/to/labelled_data/multitask_balanced
 
 cell_types: ["B_Cell", "Macrophage", "T_Cell"]
 
