@@ -1,0 +1,44 @@
+% ===========================================================================
+% Figure 3 final assembly (panels A-F) from the panel PDFs/PNGs produced by the scripts above + scripts/03_umap.py.
+%
+% Manuscript figure-generation code for "Learning and probing sequence
+% representations of immune cell alternative splicing" (MLCB 2026 / PMLR).
+%
+% Ported from: JD_build/interpretation/umapping/fig3_compose/compose_figure3.tex
+% Data inputs: run outputs under the paths in figures/config.py (currently
+%   hardcoded in this script -- see figures/README.md 'Finishing the port').
+% ===========================================================================
+% Composites the updated 6-panel manuscript Figure 3: existing panels A-D
+% (mlcb_fig_3.pdf, unchanged) plus two new panels answering Reviewer 3's request
+% to bring frozen-trunk head-only representations alongside LoCon.
+% Panel sources:
+%   A-D = mlcb_fig_3.pdf (unchanged, existing composite)
+%   E   = frozen-trunk Macrophage head_shared UMAP (donor_score, psi) —
+%         pretrained_run_1/frozen_Macrophage/RI_results/{maxent/umap_head_shared_donor_score.png, psi/umap_head_shared_psi.png}
+%   F   = LoCon-vs-frozen-trunk PSI probe comparison (KNN | Linear) —
+%         20260511_run_1/reports/fig3_extra/locon_vs_frozen_psi_probe.pdf
+% Run: pdflatex -interaction=nonstopmode compose_figure3.tex
+\documentclass[preview,border=4pt]{standalone}
+\usepackage{graphicx}
+\setlength{\parindent}{0pt}
+\begin{document}
+\begin{minipage}{10in}
+
+\includegraphics[width=\linewidth]{mlcb_fig_3.pdf}
+
+\vspace{14pt}
+
+\noindent
+\begin{minipage}[t]{0.24\linewidth}
+\textbf{\Large E}\par\vspace{2pt}
+\includegraphics[width=\linewidth]{../pretrained_run_1/frozen_Macrophage/RI_results/maxent/umap_head_shared_donor_score.png}\\[4pt]
+\includegraphics[width=\linewidth]{../pretrained_run_1/frozen_Macrophage/RI_results/psi/umap_head_shared_psi.png}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.74\linewidth}
+\textbf{\Large F}\par\vspace{2pt}
+\includegraphics[width=\linewidth]{../20260511_run_1/reports/fig3_extra/locon_vs_frozen_psi_probe.pdf}
+\end{minipage}
+
+\end{minipage}
+\end{document}

@@ -58,3 +58,4 @@ Thumbs.db
 # Keep manuscript configs and event tables
 !manuscript_runs/configs/*.yaml
 !manuscript_runs/event_tables/*.csv
+figures/out/
