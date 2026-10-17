@@ -9,9 +9,9 @@
 #   hardcoded in this script -- see figures/README.md 'Finishing the port').
 # ===========================================================================
 """
-08_locon_vs_frozen_psi_probe.py
+locon_vs_frozen_probe.py
 
-New Figure 3 panel: direct LoCon-vs-frozen-trunk PSI-accessibility comparison
+Manuscript Figure 3F: direct LoCon-vs-frozen-trunk PSI-accessibility comparison
 under KNN and linear probes, across trunk/head layers, averaged over the three
 single-cell-type models (B Cell, Macrophage, T Cell).
 
@@ -20,8 +20,8 @@ improvement over frozen-trunk models ... under k=5 KNN probes, whereas
 linear-probe performance was broadly comparable") directly, rather than
 leaving it as text pointing at two separate appendix figures.
 
-Data: 20260511_run_1/{locon,frozen}_{B_cell,Macrophage,T_cell}/ALL_results/probe_{knn,linear}/psi.csv
-Output: 20260511_run_1/reports/fig3_extra/locon_vs_frozen_psi_probe.pdf
+Data: <UMAP_RUN_ROOT>/{locon,frozen}_{B_cell,Macrophage,T_cell}/ALL_results/probe_{knn,linear}/psi.csv (see figures/config.py)
+Output: <FIG_OUT_DIR>/fig3/locon_vs_frozen_psi_probe.pdf
 """
 
 import os

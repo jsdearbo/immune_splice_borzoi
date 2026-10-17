@@ -9,25 +9,23 @@
 #   hardcoded in this script -- see figures/README.md 'Finishing the port').
 # ===========================================================================
 """
-09_consolidated_comparison_table.py
+consolidated_comparison_table.py
 
-Consolidated comparison table (promised to Reviewer 3: "compared directly in
-one figure or table, with effect sizes and uncertainty"): event-level PSI
+Manuscript Appendix Table A2: consolidated comparison of event-level PSI
 prediction performance for pretrained Borzoi (zero-shot), frozen-trunk
 head-only, single-cell-type LoCon, and shared-trunk multitask LoCon models,
 each with a bootstrap 95% CI, per cell type, on the same held-out chr11
 alternative-splicing events (SE+RI+A3SS+A5SS, i.e. the "All alt events"
-condition already used in Fig 2A-C / Appendix A2).
+condition shown in Fig 2A-C / Appendix A3).
 
-Pretrained Borzoi's per-event predictions come from a separate one-off
-inference run (eval_pretrained_borzoi.py, rerun once the GPU came back after
-this host's driver/library mismatch was fixed by a reboot) rather than the
-preds_*.tsv files the other three configurations already had on disk from
-their original evaluation runs — see preds_pretrained_{cell_type}_chr11.tsv.
+Pretrained Borzoi's per-event predictions are produced by a separate inference
+pass (eval_pretrained_borzoi.py -> preds_pretrained_{cell_type}_chr11.tsv); the
+other three configurations reuse the preds_*.tsv files written during their
+original evaluation runs.
 
 Usage:
-  python 09_consolidated_comparison_table.py
-  python 09_consolidated_comparison_table.py --n-boot 5000 --out out.md
+  python consolidated_comparison_table.py
+  python consolidated_comparison_table.py --n-boot 5000 --out out.md
 """
 
 import argparse

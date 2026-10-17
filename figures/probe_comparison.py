@@ -9,10 +9,11 @@
 #   hardcoded in this script -- see figures/README.md 'Finishing the port').
 # ===========================================================================
 """
-07_20260511_probe_comparison.py
+probe_comparison.py
 
-Grouped bar charts comparing linear/KNN probe performance across 4 models
-(Pretrained + 3 cell types) for the 20260511 locon4 and frozen-trunk runs.
+Manuscript Figure 3C-D and Appendix Figs A6-A7: grouped bar charts comparing
+linear/KNN probe performance across 4 models (pretrained + 3 cell types) for
+the locon4 and frozen-trunk runs (paths in figures/config.py).
 
 Two model groups:
   locon:  Pretrained | Locon B Cell | Locon Macrophage | Locon T Cell
@@ -24,16 +25,16 @@ Layers shown (unet_dec_0 / unet_dec_1 omitted):
   final_conv  -> Final Conv
   head_shared -> New Decoder   (fine-tuned models only; absent in pretrained)
 
-Outputs: 20260511_run_1/reports/probe_comparison/
+Outputs (under FIG_OUT_DIR, see figures/config.py): probe_comparison/
   locon_probe_comparison_linear.pdf
   locon_probe_comparison_knn.pdf
   frozen_probe_comparison_linear.pdf
   frozen_probe_comparison_knn.pdf
 
 Usage:
-  python 07_20260511_probe_comparison.py
-  python 07_20260511_probe_comparison.py --group locon --method knn
-  python 07_20260511_probe_comparison.py --event-types SE RI --attributes psi donor_score
+  python probe_comparison.py
+  python probe_comparison.py --group locon --method knn
+  python probe_comparison.py --event-types SE RI --attributes psi donor_score
 """
 
 import os
@@ -214,7 +215,7 @@ def make_pdf(png_paths: list, pdf_path: str):
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-    parser = argparse.ArgumentParser(description="20260511 probe comparison plots")
+    parser = argparse.ArgumentParser(description="Probe comparison plots (KNN/linear across models)")
     parser.add_argument("--group",       choices=["locon", "frozen", "both"], default="both")
     parser.add_argument("--method",      choices=["linear", "knn", "both"],   default="both")
     parser.add_argument("--event-types", nargs="+", default=DEFAULT_EVENT_TYPES)

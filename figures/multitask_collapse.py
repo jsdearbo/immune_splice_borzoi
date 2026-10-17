@@ -9,23 +9,25 @@
 #   hardcoded in this script -- see figures/README.md 'Finishing the port').
 # ===========================================================================
 """
-fig5_multitask_collapse.py
+multitask_collapse.py
 
-Figure 5 panels A–C: multitask model compresses cell-type PSI differences.
+Manuscript Figure 2D-E: the shared-trunk multitask model compresses cell-type
+PSI differences relative to single-task models.
 
 Panel A — Observed vs predicted inter-cell-type PSI range (scatter, single vs multitask)
 Panel B — Pairwise ΔPSI preservation (slope/r of pred_delta ~ obs_delta for B–T, B–Mac, T–Mac)
 Panel C — Correlation matrices (3×3 Pearson r: observed | single-task | multitask)
 
-Data: chr11 held-out test set predictions from 20260511 experiments.
+Data: held-out chr11 event-level predictions from the fine-tuning experiment
+runs (paths in figures/config.py).
   Events shared across all 3 cell types → Panels A and C.
   Pairwise-shared events → Panel B.
 
 Usage:
-  python fig5_multitask_collapse.py
-  python fig5_multitask_collapse.py --ft-type locon
-  python fig5_multitask_collapse.py --both          # frozen_trunk + locon, separate PDFs
-  python fig5_multitask_collapse.py --out-dir PATH
+  python multitask_collapse.py
+  python multitask_collapse.py --ft-type locon
+  python multitask_collapse.py --both          # frozen_trunk + locon, separate PDFs
+  python multitask_collapse.py --out-dir PATH
 """
 
 import os
@@ -368,7 +370,7 @@ def make_pdf(png_paths: list, pdf_path: Path):
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-    parser = argparse.ArgumentParser(description="Figure 5 multitask collapse panels")
+    parser = argparse.ArgumentParser(description="Figure 2D-E multitask compression panels")
     parser.add_argument("--ft-type", choices=list(FT_CONFIGS.keys()), default="frozen_trunk",
                         help="Fine-tuning strategy (default: frozen_trunk)")
     parser.add_argument("--both", action="store_true",
