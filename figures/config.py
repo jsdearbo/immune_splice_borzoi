@@ -58,12 +58,26 @@ RMATS_RESULTS = _p(
     "SB_RMATS_RESULTS",
     "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/results",
 )
+# Master BED files of PSI-labelled constitutive events (eval_scatter.py).
+RMATS_LABELLED_BED = _p(
+    "SB_RMATS_LABELLED_BED",
+    "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/data_labeling/results/"
+    "PSI_labelled_bed/master_beds",
+)
 LABELS_NPZ_ROOT = _p(
     "SB_LABELS_NPZ_ROOT",
     "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/data_labeling/results/labelled_data/"
     "single_cell_type_datasets/multitask_balanced",
 )
-GENOME_FASTA = _p("SB_GENOME_FASTA", "/mnt/data_sda/jdearborn/genomes/mm10/mm10.fa")
+GENOME_FASTA = _p(
+    "SB_GENOME_FASTA",
+    "/mnt/data_sda/jdearborn/genomes/mouse/mm10/fasta/GRCm38.primary_assembly.genome.fa",
+)
+# Borzoi mouse track metadata (targets_mouse.txt) for the pretrained baseline.
+BORZOI_TARGETS_MOUSE = _p(
+    "SB_BORZOI_TARGETS_MOUSE",
+    "/mnt/data_sda/jdearborn/git_repos/edit_baskerville/borzoi/examples/targets_mouse.txt",
+)
 
 CELL_TYPES = ["B_cell", "Macrophage", "T_cell"]
 

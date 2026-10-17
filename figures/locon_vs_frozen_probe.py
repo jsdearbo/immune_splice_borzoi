@@ -34,8 +34,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 _SCRIPT_DIR = Path(__file__).parent
-_RUN_ROOT = _SCRIPT_DIR / "20260511_run_1"
-_OUT_DIR = _RUN_ROOT / "reports" / "fig3_extra"
+import config
+
+_RUN_ROOT = config.UMAP_RUN_ROOT
+_OUT_DIR = config.OUT_DIR / "fig3"
 
 CELL_TYPES = ["B_cell", "Macrophage", "T_cell"]
 KEEP_LAYERS = ["conv_tower", "transformer", "final_conv", "head_shared"]

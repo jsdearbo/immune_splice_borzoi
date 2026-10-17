@@ -40,7 +40,9 @@ from scipy import stats
 
 import multitask_collapse as fmc
 
-PRETRAINED_DIR = Path("/mnt/data_sda/jdearborn/scratch/JD_build/pretrained_borzoi_eval")
+import config
+
+PRETRAINED_DIR = config.PRETRAINED_EVAL_ROOT
 
 CONFIGS = {
     "pretrained": {
@@ -50,17 +52,17 @@ CONFIGS = {
     },
     "frozen_trunk": {
         "label": "Frozen-trunk head-only",
-        "base": fmc._EXPT_BASE / "20260511_single_cell_types_frozen_trunk",
+        "base": config.EXPERIMENTS_ROOT / "20260511_single_cell_types_frozen_trunk",
         "pattern": "single",
     },
     "locon": {
         "label": "Single-cell-type LoCon",
-        "base": fmc._EXPT_BASE / "20260511_single_cell_types_locon4",
+        "base": config.EXPERIMENTS_ROOT / "20260511_single_cell_types_locon4",
         "pattern": "single",
     },
     "multitask": {
         "label": "Shared-trunk multitask LoCon",
-        "base": fmc._EXPT_BASE / "20260511_multitask_locon" / "cosine_decay_fix" / "evaluation_test" / "scatterplots",
+        "base": config.EXPERIMENTS_ROOT / "20260511_multitask_locon" / "cosine_decay_fix" / "evaluation_test" / "scatterplots",
         "pattern": "multitask",
     },
 }
@@ -96,7 +98,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--n-boot", type=int, default=2000)
     ap.add_argument("--seed", type=int, default=0)
-    ap.add_argument("--out", type=Path, default=Path(__file__).parent / "20260511_run_1" / "reports" / "consolidated_comparison_table.md")
+    ap.add_argument("--out", type=Path, default=config.OUT_DIR / "tableA2_comparison.md")
     args = ap.parse_args()
 
     rng = np.random.default_rng(args.seed)

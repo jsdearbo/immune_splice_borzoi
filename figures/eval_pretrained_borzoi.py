@@ -57,16 +57,11 @@ from grelu.sequence.format import strings_to_one_hot
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
-TARGETS_MOUSE = (
-    "/mnt/data_sda/jdearborn/git_repos/edit_baskerville/"
-    "borzoi/examples/targets_mouse.txt"
-)
+import config
 
-NPZ_BASE = (
-    "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/"
-    "data_labeling/results/labelled_data/"
-    "single_cell_type_datasets/multitask_balanced"
-)
+TARGETS_MOUSE = str(config.BORZOI_TARGETS_MOUSE)
+
+NPZ_BASE = str(config.LABELS_NPZ_ROOT)
 
 # Each cell-type-specific NPZ has exactly 1 task (task_idx=0).
 NPZ_TEST_DIRS = {

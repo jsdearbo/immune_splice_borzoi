@@ -50,8 +50,10 @@ from grelu.sequence.format import strings_to_one_hot
 import torch.nn as nn
 
 # DEFAULTS
-GENOME_FASTA = "/mnt/data_sda/jdearborn/genomes/mouse/mm10/fasta/GRCm38.primary_assembly.genome.fa"
-RMATS_BASE = "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/results"
+import config
+
+GENOME_FASTA = str(config.GENOME_FASTA)
+RMATS_BASE = str(config.RMATS_RESULTS)
 
 CELL_TYPE_MAP = {
     "B_Cell": "B_only",
@@ -59,7 +61,7 @@ CELL_TYPE_MAP = {
     "Macrophage": "Macrophage_only"
 }
 
-BED_BASE_PATH = "/mnt/data_sda/jdearborn/scratch/Imm_cell_rMATS/data_labeling/results/PSI_labelled_bed/master_beds"
+BED_BASE_PATH = str(config.RMATS_LABELLED_BED)
 
 def load_config(config_path):
     with open(config_path, 'r') as file:

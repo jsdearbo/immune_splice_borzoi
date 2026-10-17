@@ -25,7 +25,7 @@ via environment variables). See **Finishing the port** below for the known gap.
 | **Fig 3E** (frozen-trunk UMAP) | `../scripts/03_umap.py` | frozen-model embeddings | Same script, `frozen_*` run dirs. |
 | **Fig 3F** (LoCon vs frozen, by probe) | `locon_vs_frozen_probe.py` | probe CSVs (`UMAP_RUN_ROOT`) | New for the revision. |
 | **Fig 3** final composite | `compose_figure3.tex` | panel PDFs/PNGs above | `pdflatex compose_figure3.tex`. |
-| **Appendix A1** (model schematic) | `model_taxonomy_schematic.py` | none (illustrative) | Self-contained. |
+| **Appendix A1** (model schematic) | — | — | Illustrative schematic, assembled manually (not analysis code). |
 | **Appendix A2** (labeling workflow) | — | — | Companion `Imm_cell_rMATS` (flowchart). |
 | **Appendix A3** (event diagnostics) | `eval_scatter.py` → `plot_separated_events` | as Fig 2A–C | |
 | **Appendix A4–A5** (UMAP attr maps) | `../scripts/03_umap.py` | embeddings | |
@@ -46,7 +46,6 @@ python figures/multitask_collapse.py --ft-type locon
 python figures/consolidated_comparison_table.py --n-boot 2000
 python figures/locon_vs_frozen_probe.py
 python figures/probe_comparison.py --group both --method both
-python figures/model_taxonomy_schematic.py
 pdflatex figures/compose_figure3.tex
 ```
 

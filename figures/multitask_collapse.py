@@ -44,9 +44,11 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 
-_EXPT_BASE = Path("/mnt/data_sda/jdearborn/scratch/T_and_B_cells/experiments")
+import config
+
+_EXPT_BASE = config.EXPERIMENTS_ROOT
 _SCRIPT_DIR = Path(__file__).parent
-_DEFAULT_OUT = _SCRIPT_DIR / "20260511_run_1" / "reports" / "fig5"
+_DEFAULT_OUT = config.OUT_DIR / "fig2_multitask"
 
 FT_CONFIGS = {
     "frozen_trunk": {

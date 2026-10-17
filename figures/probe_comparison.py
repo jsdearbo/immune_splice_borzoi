@@ -52,8 +52,10 @@ from matplotlib.backends.backend_pdf import PdfPages
 # ── Constants ─────────────────────────────────────────────────────────────────
 
 _SCRIPT_DIR      = os.path.dirname(os.path.abspath(__file__))
-_PRETRAINED_ROOT = os.path.join(_SCRIPT_DIR, "pretrained_run_1", "pretrained")
-_RUN_ROOT        = os.path.join(_SCRIPT_DIR, "20260511_run_1")
+import config
+
+_PRETRAINED_ROOT = str(config.PRETRAINED_UMAP_ROOT)
+_RUN_ROOT        = str(config.UMAP_RUN_ROOT)
 
 KEEP_LAYERS = ["conv_tower", "transformer", "final_conv", "head_shared"]
 LAYER_LABELS = {
@@ -217,7 +219,7 @@ def main():
     parser.add_argument("--method",      choices=["linear", "knn", "both"],   default="both")
     parser.add_argument("--event-types", nargs="+", default=DEFAULT_EVENT_TYPES)
     parser.add_argument("--attributes",  nargs="+", default=DEFAULT_ATTRIBUTES)
-    parser.add_argument("--out-dir",     default=os.path.join(_RUN_ROOT, "reports", "probe_comparison"))
+    parser.add_argument("--out-dir",     default=os.path.join(str(config.OUT_DIR), "probe_comparison"))
     args = parser.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
