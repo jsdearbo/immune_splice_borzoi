@@ -51,6 +51,7 @@ import torch.nn as nn
 
 # DEFAULTS
 import config
+import figstyle
 
 GENOME_FASTA = str(config.GENOME_FASTA)
 RMATS_BASE = str(config.RMATS_RESULTS)
@@ -370,18 +371,18 @@ def plot_separated_events(events_df, psi_label, file_tag, chrom, psi_source, out
         ax.plot([0, 1], [0, 1], 'r--', alpha=0.5)
         ax.set_xlim(0, 1)
         ax.set_ylim(0, 1)
-        ax.set_xlabel(psi_label, fontsize=9)
-        ax.set_ylabel("Predicted PSI", fontsize=9)
+        ax.set_xlabel(psi_label)
+        ax.set_ylabel("Predicted PSI")
         if len(sub) >= 2:
             r_p, _ = pearsonr(sub['psi'], sub['predicted_psi'])
             r_s, _ = spearmanr(sub['psi'], sub['predicted_psi'])
-            ax.set_title(f"{et}  (N={len(sub)})", fontsize=10, fontweight='bold')
+            ax.set_title(f"{et}  (N={len(sub)})")
             ax.text(0.05, 0.92, f"Pearson={r_p:.3f}\nSpearman={r_s:.3f}",
-                    transform=ax.transAxes, fontsize=9, va='top',
+                    transform=ax.transAxes, fontsize=figstyle.ANNOT, va='top',
                     bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
         else:
-            ax.set_title(f"{et}  (N={len(sub)}, skipped)", fontsize=10)
-    fig.suptitle(f"{file_tag} ({chrom}) [{psi_source}]", fontsize=11)
+            ax.set_title(f"{et}  (N={len(sub)}, skipped)")
+    fig.suptitle(f"{file_tag} ({chrom}) [{psi_source}]")
     fig.tight_layout()
     out = os.path.join(out_dir, f"scatter_{file_tag}_{chrom}_{psi_source}_by_event.png")
     fig.savefig(out, dpi=150, bbox_inches='tight')
@@ -454,14 +455,14 @@ def plot_comparison(model_stats_rows, cell_type, chrom, psi_source,
 
     ax.axhline(0, color='black', linewidth=0.7, linestyle='--', zorder=0)
     ax.set_xticks(x)
-    ax.set_xticklabels([EVENT_DISPLAY.get(e, e) for e in events], fontsize=10)
-    ax.set_ylabel("Pearson r  (test, chr11)", fontsize=10)
+    ax.set_xticklabels([EVENT_DISPLAY.get(e, e) for e in events])
+    ax.set_ylabel("Pearson r  (test, chr11)")
     ct_display = cell_type.replace("_", " ")
-    ax.set_title(ct_display, fontsize=11)
+    ax.set_title(ct_display)
     ax.set_ylim(-0.2, 1.0)
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
-    ax.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=9, frameon=False)
+    ax.legend(loc='upper left', bbox_to_anchor=(1, 1), frameon=False)
     fig.tight_layout()
 
     out = os.path.join(out_dir, f"comparison_{file_tag}_{chrom}_{psi_source}.png")
@@ -472,6 +473,7 @@ def plot_comparison(model_stats_rows, cell_type, chrom, psi_source,
 
 def main():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    figstyle.apply()
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config', type=str, required=True, help="Path to train_config.yaml")
     parser.add_argument('--ckpt', type=str, required=True, help="Path to .ckpt file or experiment directory")

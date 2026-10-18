@@ -47,6 +47,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 # ── Constants ─────────────────────────────────────────────────────────────────
 
 import config
+import figstyle
 
 _EXPT_BASE = config.EXPERIMENTS_ROOT
 _SCRIPT_DIR = Path(__file__).parent
@@ -198,31 +199,31 @@ def panel_a(df3: pd.DataFrame, out_dir: Path, ft_label: str) -> Path:
         # Annotate mean predicted on the y-axis side using a blended transform
         trans = mtransforms.blended_transform_factory(ax.transAxes, ax.transData)
         ax.text(0.02, mean_pred + 0.02, f"mean pred = {mean_pred:.3f}",
-                transform=trans, ha="left", va="bottom", fontsize=9, color="black")
+                transform=trans, ha="left", va="bottom", fontsize=figstyle.ANNOT, color="black")
 
         ax.set_xlim(-0.03, 1.03)
         ax.set_ylim(-0.03, 1.03)
-        ax.set_xlabel("Observed PSI range", fontsize=11)
-        ax.set_title(MODEL_LABELS[model_key], fontsize=11, fontweight="bold")
+        ax.set_xlabel("Observed PSI range")
+        ax.set_title(MODEL_LABELS[model_key])
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
         ax.text(0.97, 0.04, f"n = {len(df)}", transform=ax.transAxes,
-                fontsize=9, ha="right", va="bottom", color="#555555")
+                fontsize=figstyle.ANNOT, ha="right", va="bottom", color="#555555")
 
-    axes[0].set_ylabel("Predicted PSI range", fontsize=11)
+    axes[0].set_ylabel("Predicted PSI range")
 
     # Mean observed annotation on the x-axis of the left panel
     trans0 = mtransforms.blended_transform_factory(axes[0].transData, axes[0].transAxes)
     axes[0].text(mean_obs + 0.01, 0.97, f"mean obs = {mean_obs:.3f}",
-                 transform=trans0, ha="left", va="top", fontsize=9, color="#666666")
+                 transform=trans0, ha="left", va="top", fontsize=figstyle.ANNOT, color="#666666")
 
     handles = [plt.Line2D([0], [0], marker="o", color="w", markerfacecolor=c,
                           markersize=8, label=e)
                for e, c in EVENT_COLORS.items()]
-    axes[0].legend(handles=handles, fontsize=8, frameon=False, loc="upper left")
+    axes[0].legend(handles=handles, frameon=False, loc="upper left")
 
     fig.suptitle(f"Inter-cell-type PSI range: observed vs predicted  [{ft_label}]",
-                 fontsize=12, fontweight="bold", y=1.01)
+                 y=1.01)
     plt.tight_layout()
 
     out_path = out_dir / f"fig5a_range_{ft_label.replace(' ', '_')}.png"
@@ -268,25 +269,25 @@ def panel_b(data: dict, out_dir: Path, ft_label: str,
             offset = 0.008 if row["slope"] >= 0 else -0.008
             va = "bottom" if row["slope"] >= 0 else "top"
             ax.text(xi, row["slope"] + offset, f"{row['slope']:.2f}",
-                    ha="center", va=va, fontsize=8)
+                    ha="center", va=va, fontsize=figstyle.ANNOT_SM)
 
     ymin = min(res["slope"].min() * 1.4, -0.05)
     ymax = max(res["slope"].max() * 1.4,  0.10)
     ax.set_xticks(x)
-    ax.set_xticklabels(pair_names, fontsize=11)
-    ax.set_ylabel("Slope  (pred ΔPSI ~ obs ΔPSI)", fontsize=10)
+    ax.set_xticklabels(pair_names)
+    ax.set_ylabel("Slope  (pred ΔPSI ~ obs ΔPSI)")
     ax.set_ylim(ymin, ymax)
     ax.axhline(0, color="black", linewidth=0.8)
-    ax.set_title(f"Pairwise ΔPSI preservation  [{ft_label}]", fontsize=12, fontweight="bold")
+    ax.set_title(f"Pairwise ΔPSI preservation  [{ft_label}]")
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.legend(fontsize=9, frameon=False, loc="upper right")
+    ax.legend(frameon=False, loc="upper right")
 
     # Annotate n (from records, already filtered)
     for xi, pair_name in zip(x, pair_names):
         n = res[(res["pair"] == pair_name) & (res["model"] == "single")]["n"].values[0]
         ax.text(xi, ymin * 0.85, f"n={n}", ha="center", va="top",
-                fontsize=7, color="#555555")
+                fontsize=figstyle.ANNOT_SM, color="#555555")
 
     plt.tight_layout()
 
@@ -328,19 +329,18 @@ def panel_c(df3: pd.DataFrame, out_dir: Path, ft_label: str) -> Path:
 
     for ax, (title, mat) in zip(axes, panels):
         im = ax.imshow(mat, vmin=0.5, vmax=1.0, cmap="Blues", aspect="auto")
-        ax.set_xticks(range(3)); ax.set_xticklabels(tick_labels, fontsize=9)
-        ax.set_yticks(range(3)); ax.set_yticklabels(tick_labels, fontsize=9)
+        ax.set_xticks(range(3)); ax.set_xticklabels(tick_labels)
+        ax.set_yticks(range(3)); ax.set_yticklabels(tick_labels)
         for i in range(3):
             for j in range(3):
                 val = mat[i, j]
                 txt_color = "white" if val > 0.8 else "black"
                 ax.text(j, i, f"{val:.2f}", ha="center", va="center",
-                        fontsize=11, fontweight="bold", color=txt_color)
-        ax.set_title(title, fontsize=11, fontweight="bold")
+                        fontsize=12, fontweight="bold", color=txt_color)
+        ax.set_title(title)
         plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
 
-    fig.suptitle(f"Inter-cell-type PSI correlations  [{ft_label}]  n = {len(df3)}",
-                 fontsize=12, fontweight="bold")
+    fig.suptitle(f"Inter-cell-type PSI correlations  [{ft_label}]  n = {len(df3)}")
     plt.tight_layout()
 
     out_path = out_dir / f"fig5c_corrmat_{ft_label.replace(' ', '_')}.png"
@@ -369,6 +369,7 @@ def make_pdf(png_paths: list, pdf_path: Path):
 
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+    figstyle.apply()
 
     parser = argparse.ArgumentParser(description="Figure 2D-E multitask compression panels")
     parser.add_argument("--ft-type", choices=list(FT_CONFIGS.keys()), default="frozen_trunk",

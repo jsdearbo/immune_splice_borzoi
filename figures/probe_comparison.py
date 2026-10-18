@@ -54,6 +54,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 _SCRIPT_DIR      = os.path.dirname(os.path.abspath(__file__))
 import config
+import figstyle
 
 _PRETRAINED_ROOT = str(config.PRETRAINED_UMAP_ROOT)
 _RUN_ROOT        = str(config.UMAP_RUN_ROOT)
@@ -144,9 +145,12 @@ def _annotate_bar(ax, x_center, bar_val, annot_val, annot_col):
     if not (np.isfinite(bar_val) and np.isfinite(annot_val)):
         return
     prefix = {"r2": "r²", "pearson_r": "r", "auc": "auc", "accuracy": "acc"}.get(annot_col, annot_col)
-    offset = 0.015 if bar_val >= 0 else -0.03
+    # Rotate vertical: 3-4 grouped bars per layer are too narrow to fit the
+    # annotations horizontally (they otherwise overlap into unreadable runs).
+    offset = 0.02 if bar_val >= 0 else -0.02
+    va = "bottom" if bar_val >= 0 else "top"
     ax.text(x_center, bar_val + offset, f"{prefix}={annot_val:.2f}",
-            ha="center", va="bottom", fontsize=7, color="#333333")
+            ha="center", va=va, rotation=90, fontsize=figstyle.ANNOT_SM, color="#333333")
 
 
 def plot_comparison(attr: str, model_dfs: dict, event_type: str, method: str,
@@ -174,17 +178,18 @@ def plot_comparison(attr: str, model_dfs: dict, event_type: str, method: str,
             _annotate_bar(ax, xpos, bar_val, annot_val, secondary_col)
 
     ymin = min(0.0, (min(all_bar_vals) - 0.08)) if all_bar_vals else -0.1
-    ymax = (max(all_bar_vals) + 0.20) if all_bar_vals else 1.0
+    # Extra headroom for the vertical r²/r annotations above each bar.
+    ymax = (max(all_bar_vals) + 0.26) if all_bar_vals else 1.0
     ax.set_ylim(ymin, ymax)
     ax.axhline(0, color="black", linewidth=0.8, linestyle="--", zorder=0)
     ax.set_xticks(x)
-    ax.set_xticklabels([LAYER_LABELS[l] for l in KEEP_LAYERS], fontsize=10)
-    ax.set_ylabel(ylabel, fontsize=11)
-    ax.set_title(f"{attr}  —  {method.upper()} probe  |  {event_type} events",
-                 fontsize=12, fontweight="bold")
+    ax.set_xticklabels([LAYER_LABELS[l] for l in KEEP_LAYERS])
+    ax.set_ylabel(ylabel)
+    attr_disp = figstyle.ATTR_LABELS.get(attr, attr)
+    ax.set_title(f"{attr_disp}  —  {method.upper()} probe  |  {event_type} events")
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.legend(loc="upper left", fontsize=9, frameon=False)
+    ax.legend(loc="upper left", frameon=False)
     ax.grid(axis="y", alpha=0.25)
     plt.tight_layout()
 
@@ -214,6 +219,7 @@ def make_pdf(png_paths: list, pdf_path: str):
 
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+    figstyle.apply()
 
     parser = argparse.ArgumentParser(description="Probe comparison plots (KNN/linear across models)")
     parser.add_argument("--group",       choices=["locon", "frozen", "both"], default="both")

@@ -35,6 +35,7 @@ import matplotlib.pyplot as plt
 
 _SCRIPT_DIR = Path(__file__).parent
 import config
+import figstyle
 
 _RUN_ROOT = config.UMAP_RUN_ROOT
 _OUT_DIR = config.OUT_DIR / "fig3"
@@ -54,6 +55,7 @@ def load_pearson(model_key: str, cell_type: str, method: str) -> pd.Series:
 
 
 def main():
+    figstyle.apply()
     _OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     fig, axes = plt.subplots(1, 2, figsize=(10, 4.2), sharey=True)
@@ -70,19 +72,20 @@ def main():
                    color=MODEL_COLORS[model_key], edgecolor="black", linewidth=0.6,
                    label=MODEL_LABELS[model_key])
             for xi, m_ in zip(xpos, mean):
-                ax.text(xi, m_ + 0.02, f"{m_:.2f}", ha="center", va="bottom", fontsize=7)
+                ax.text(xi, m_ + 0.02, f"{m_:.2f}", ha="center", va="bottom",
+                        fontsize=figstyle.ANNOT_SM)
 
         ax.set_xticks(x)
-        ax.set_xticklabels([LAYER_LABELS[l] for l in KEEP_LAYERS], fontsize=9)
-        ax.set_title(f"{'$k$=5 KNN' if method == 'knn' else 'Linear'} probe", fontsize=11, fontweight="bold")
+        ax.set_xticklabels([LAYER_LABELS[l] for l in KEEP_LAYERS])
+        ax.set_title(f"{'$k$=5 KNN' if method == 'knn' else 'Linear'} probe")
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
         ax.grid(axis="y", alpha=0.25)
         ax.axhline(0, color="black", linewidth=0.8)
 
-    axes[0].set_ylabel("PSI Pearson r\n(mean $\\pm$ SEM across B/Mac/T)", fontsize=10)
-    axes[0].legend(loc="upper left", fontsize=9, frameon=False)
-    fig.suptitle("LoCon vs. frozen-trunk: PSI accessibility by probe type", fontsize=12, fontweight="bold")
+    axes[0].set_ylabel("PSI Pearson r\n(mean $\\pm$ SEM across B/Mac/T)")
+    axes[0].legend(loc="upper left", frameon=False)
+    fig.suptitle("LoCon vs. frozen-trunk: PSI accessibility by probe type")
     plt.tight_layout()
 
     out_path = _OUT_DIR / "locon_vs_frozen_psi_probe.pdf"
