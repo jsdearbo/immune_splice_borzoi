@@ -28,6 +28,7 @@ _LAYOUT = {
     "UMAP_RUN_ROOT":        "umap_run",
     "PRETRAINED_UMAP_ROOT": "umap_run/pretrained",
     "PRETRAINED_EVAL_ROOT": "pretrained_eval",
+    "BASELINE_SUMMARY":     "baselines/baseline_summary.csv",
     "RMATS_RESULTS":        "rmats/results",
     "RMATS_LABELLED_BED":   "rmats/master_beds",
     "LABELS_NPZ_ROOT":      "labels_npz",
@@ -77,6 +78,13 @@ PRETRAINED_UMAP_ROOT = _root(
 PRETRAINED_EVAL_ROOT = _root(
     "PRETRAINED_EVAL_ROOT",
     "/mnt/data_sda/jdearborn/scratch/JD_build/pretrained_borzoi_eval",
+)
+
+# Ridge-regression baseline summary (MaxEnt-only and full-feature probes, per
+# cell type x event class). Consumed by prediction_bars.py (Fig 2A-C).
+BASELINE_SUMMARY = _root(
+    "BASELINE_SUMMARY",
+    "/mnt/data_sda/jdearborn/scratch/JD_build/interpretation/umapping/baseline_run_1/summary.csv",
 )
 
 # --- Upstream data (companion repo Imm_cell_rMATS) --------------------------

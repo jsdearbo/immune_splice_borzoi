@@ -17,9 +17,9 @@ via environment variables). See **Finishing the port** below for the known gap.
 | Manuscript item | Script here | Consumes | Notes |
 |---|---|---|---|
 | **Fig 1** (labeling framework; A–D) | — | — | Lives in companion **`Imm_cell_rMATS/analysis/figure1/`** (`panel_*` + `compose_figure1.tex`). Not duplicated here. |
-| **Fig 2A–C** (single-cell-type prediction) | `eval_scatter.py` → `plot_comparison` | rMATS events + model checkpoints (inference) | Also emits Appendix Fig A3 panels (`plot_separated_events`). |
-| **Fig 2D–E** (multitask compression) | `multitask_collapse.py` | per-event pred TSVs (`EXPERIMENTS_ROOT`) | Correlation matrices + observed-vs-predicted PSI range. |
-| **Fig 2** final composite | *(manual)* | panels above | Assembled in Adobe Illustrator — no compositor script (see **Honesty notes**). |
+| **Fig 2A–C** (single-cell-type prediction) | `prediction_bars.py` | model stats + ridge baselines (`BASELINE_SUMMARY`) + pretrained summary | CPU-only replot from saved metrics. `eval_scatter.py` is the inference source that produced those metrics (and Appendix Fig A3). |
+| **Fig 2D–E** (multitask compression) | `multitask_collapse.py` | per-event pred TSVs (`EXPERIMENTS_ROOT`) | Correlation matrices + observed-vs-predicted PSI range; emits PNG + PDF. |
+| **Fig 2** final composite | `compose_figure2.tex` | panel PDFs above | `pdflatex compose_figure2.tex`. |
 | **Fig 3A–B** (UMAP: pretrained / adapted) | `../scripts/03_umap.py` | embeddings (`UMAP_RUN_ROOT`) | Produced by the clean pipeline, run per model. |
 | **Fig 3C–D** (KNN probe bars) | `probe_comparison.py` | probe CSVs (`UMAP_RUN_ROOT`, `PRETRAINED_UMAP_ROOT`) | Also emits Appendix Figs A6–A7. |
 | **Fig 3E** (frozen-trunk UMAP) | `../scripts/03_umap.py` | frozen-model embeddings | Same script, `frozen_*` run dirs. |
@@ -70,10 +70,12 @@ local constants. To make the release self-contained:
 
 ## Honesty notes (reproducibility scope)
 
-- **Figures 1 and 2 are assembled manually** (Adobe Illustrator; see the
-  software table, Appendix Table A1). The scripts here reproduce the *panels and
-  the underlying numbers*; final panel layout/lettering is manual. Figure 3 is
-  the exception — `compose_figure3.tex` assembles it programmatically.
+- **All three main figures are now composited programmatically** via
+  `compose_figure{1,2,3}.tex` (`pdflatex`), with no Adobe Illustrator step.
+  Figures 1 and 2 were previously hand-assembled in Illustrator; the camera-ready
+  revision replaced that with the LaTeX compositors here (Fig 1 lives in the
+  companion `Imm_cell_rMATS/analysis/figure1/`). Font/legend styling is shared
+  across panels via `figstyle.py`.
 - `multitask_collapse.py` keeps its original internal name (`fig5_*`) in the
   module docstring; the manuscript figure numbering changed during revision
   (old Fig 5 → Fig 2D–E). The file header banner states the current mapping.

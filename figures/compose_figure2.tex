@@ -1,0 +1,45 @@
+% ===========================================================================
+% Figure 2 final assembly (panels A-E) from the panel PDFs produced by
+% prediction_bars.py (A-C) and multitask_collapse.py (D-E).
+%
+% Manuscript figure-generation code for "Learning and probing sequence
+% representations of immune cell alternative splicing" (MLCB 2026 / PMLR).
+%
+% Replaces the former Adobe Illustrator assembly of Figure 2 with a
+% programmatic composite (cf. compose_figure1.tex / compose_figure3.tex), so
+% the figure regenerates from code with no raster editor.
+%
+% Panel sources (relative to figures/, with FIG_OUT_DIR defaulting to out/):
+%   A-C = out/fig2/comparison_{B_Cell,Macrophage,T_Cell}.pdf  (prediction_bars.py)
+%   legend = out/fig2/comparison_legend.pdf                   (prediction_bars.py)
+%   D   = out/fig2_multitask/fig5c_corrmat_LoCon.pdf          (multitask_collapse.py)
+%   E   = out/fig2_multitask/fig5a_range_LoCon.pdf            (multitask_collapse.py)
+% Run: pdflatex -interaction=nonstopmode compose_figure2.tex
+\documentclass[preview,border=4pt]{standalone}
+\usepackage{graphicx}
+\setlength{\parindent}{0pt}
+\begin{document}
+\begin{minipage}{13in}
+
+\noindent
+% ── Left column: per-cell-type prediction bars (A-C) ──────────────────────
+\begin{minipage}[t]{0.49\linewidth}
+\textbf{\Large A}\par\vspace{3pt}
+\includegraphics[width=\linewidth]{out/fig2/comparison_B_Cell.pdf}\\[10pt]
+\textbf{\Large B}\par\vspace{3pt}
+\includegraphics[width=\linewidth]{out/fig2/comparison_Macrophage.pdf}\\[10pt]
+\textbf{\Large C}\par\vspace{3pt}
+\includegraphics[width=\linewidth]{out/fig2/comparison_T_Cell.pdf}
+\end{minipage}%
+\hfill
+% ── Right column: correlation matrices (D), range (E), shared legend ──────
+\begin{minipage}[t]{0.49\linewidth}
+\textbf{\Large D}\par\vspace{3pt}
+\includegraphics[width=\linewidth]{out/fig2_multitask/fig5c_corrmat_LoCon.pdf}\\[10pt]
+\textbf{\Large E}\par\vspace{3pt}
+\includegraphics[width=\linewidth]{out/fig2_multitask/fig5a_range_LoCon.pdf}\\[12pt]
+\centerline{\includegraphics[width=0.95\linewidth]{out/fig2/comparison_legend.pdf}}
+\end{minipage}
+
+\end{minipage}
+\end{document}

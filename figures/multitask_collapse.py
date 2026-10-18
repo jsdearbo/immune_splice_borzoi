@@ -228,6 +228,7 @@ def panel_a(df3: pd.DataFrame, out_dir: Path, ft_label: str) -> Path:
 
     out_path = out_dir / f"fig5a_range_{ft_label.replace(' ', '_')}.png"
     plt.savefig(out_path, dpi=150, bbox_inches="tight")
+    plt.savefig(out_path.with_suffix(".pdf"), bbox_inches="tight")  # vector, for compose_figure2
     plt.close(fig)
     logging.info(f"  Saved -> {out_path}")
     return out_path
@@ -345,6 +346,7 @@ def panel_c(df3: pd.DataFrame, out_dir: Path, ft_label: str) -> Path:
 
     out_path = out_dir / f"fig5c_corrmat_{ft_label.replace(' ', '_')}.png"
     plt.savefig(out_path, dpi=150, bbox_inches="tight")
+    plt.savefig(out_path.with_suffix(".pdf"), bbox_inches="tight")  # vector, for compose_figure2
     plt.close(fig)
     logging.info(f"  Saved -> {out_path}")
     return out_path
