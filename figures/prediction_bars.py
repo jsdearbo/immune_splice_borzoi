@@ -103,7 +103,7 @@ def plot_cell_type(ct_tag, chrom, baseline_df, pretrained_df, out_dir):
     width = 0.8 / n_bars
     x = np.arange(len(events))
 
-    fig, ax = plt.subplots(figsize=(1.5 * len(events) + 1.3, 1.95))
+    fig, ax = plt.subplots(figsize=(1.5 * len(events) + 1.3, 1.7))
     for i, (bname, col, label) in enumerate(BAR_SPEC):
         offset = (i - (n_bars - 1) / 2) * width
         if bname == "model":

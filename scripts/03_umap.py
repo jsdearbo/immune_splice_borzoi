@@ -37,6 +37,12 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import umap as umap_lib
 
+# Shared figure styling lives in ../figures/figstyle.py (one font scale across
+# all manuscript panels); add it to the path since this script is in scripts/.
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "figures"))
+import figstyle
+
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -108,9 +114,8 @@ def _plot_categorical(ax, coords, labels, palette, title, col_name):
             s=18, alpha=0.75, linewidths=0,
         )
 
-    ax.legend(title=col_name, fontsize=7, title_fontsize=8,
-              markerscale=1.5, loc="best", framealpha=0.6)
-    ax.set_title(title, fontsize=9)
+    ax.legend(title=col_name, markerscale=1.5, loc="best", framealpha=0.6)
+    ax.set_title(title)
     ax.set_xlabel("UMAP 1")
     ax.set_ylabel("UMAP 2")
     ax.grid(True, alpha=0.2)
@@ -134,7 +139,7 @@ def _plot_continuous(ax, coords, values, cmap_name, title, col_name):
         )
         plt.colorbar(sc, ax=ax, label=col_name, shrink=0.8)
 
-    ax.set_title(title, fontsize=9)
+    ax.set_title(title)
     ax.set_xlabel("UMAP 1")
     ax.set_ylabel("UMAP 2")
     ax.grid(True, alpha=0.2)
@@ -159,7 +164,10 @@ def save_umap_plots(
         os.makedirs(subdir, exist_ok=True)
 
         fig, ax = plt.subplots(figsize=(7, 6))
-        title = f"{component_label} | {col_name}\n{model_tag}  (N={n_valid})"
+        # Concise title: layer | attribute. Model tag and N (={n_valid}) are
+        # conveyed by the panel grouping and caption, so they are omitted here
+        # to keep the small composited panels legible.
+        title = f"{component_label} | {col_name}"
 
         if kind == "categorical":
             palette = CATEGORICAL_PALETTES.get(col_name, list(mcolors.TABLEAU_COLORS.values()))
@@ -183,6 +191,7 @@ def main():
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
     )
+    figstyle.apply()
 
     parser = argparse.ArgumentParser(
         description="Run UMAP on saved embeddings and save colour-coded scatter plots"
