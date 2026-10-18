@@ -121,7 +121,9 @@ def plot_cell_type(ct_tag, chrom, baseline_df, pretrained_df, out_dir):
     ax.axhline(0, color="black", linewidth=0.7, linestyle="--", zorder=0)
     ax.set_xticks(x)
     ax.set_xticklabels([EVENT_DISPLAY.get(e, e) for e in events])
-    ax.set_ylabel("Pearson r  (test, chr11)")
+    # "test, chr11" is stated in the caption; keep the rotated label short so it
+    # does not overhang the flat panels and collide with the panel letters.
+    ax.set_ylabel("Pearson r")
     ax.set_title(ct_tag.replace("_", " "))
     ax.set_ylim(-0.2, 1.0)
     ax.spines[["top", "right"]].set_visible(False)
