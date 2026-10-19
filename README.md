@@ -171,8 +171,25 @@ Attribution configs (one per cell type × event type combination):
 If you use this code, please cite:
 
 ```
-Dearborn et al. (2026). Learning and probing sequence representations of
-immune cell alternative splicing. [journal]
+Dearborn, J.S., Stagg, R., Limoge, D.W., Kirch, T., Miller, Z.D., Dowell, W.,
+Languon, S., Cockrell, R.C., and Majumdar, D. (2026). Learning and probing
+sequence representations of immune cell alternative splicing. Proceedings of
+Machine Learning in Computational Biology (MLCB), Proceedings of Machine
+Learning Research, PMLR. (To appear.)
+```
+
+BibTeX (update volume/pages/url once assigned by PMLR):
+
+```bibtex
+@inproceedings{dearborn2026learning,
+  title     = {Learning and probing sequence representations of immune cell alternative splicing},
+  author    = {Dearborn, Jacob S. and Stagg, Ryan and Limoge, Damas W. and Kirch, Tylar and Miller, Zachary D. and Dowell, William and Languon, Sylvester and Cockrell, Robert C. and Majumdar, Devdoot},
+  booktitle = {Proceedings of Machine Learning in Computational Biology (MLCB)},
+  series    = {Proceedings of Machine Learning Research},
+  publisher = {PMLR},
+  year      = {2026},
+  note      = {To appear}
+}
 ```
 
 Please also cite Borzoi:
