@@ -155,12 +155,13 @@ def _annotate_bar(ax, x_center, bar_val, annot_val, annot_col):
 
 def plot_comparison(attr: str, model_dfs: dict, event_type: str, method: str,
                     primary_col: str, secondary_col: str, ylabel: str,
-                    out_dir: str, fname_prefix: str = "") -> str:
+                    out_dir: str, fname_prefix: str = "",
+                    ymax_fixed: "float | None" = None, fig_height: float = 5.0) -> str:
     n_models = len(model_dfs)
     x = np.arange(len(KEEP_LAYERS))
     offsets = np.linspace(-(n_models - 1) / 2, (n_models - 1) / 2, n_models) * BAR_WIDTH
 
-    fig, ax = plt.subplots(figsize=(max(7, len(KEEP_LAYERS) * 2.2), 5))
+    fig, ax = plt.subplots(figsize=(max(7, len(KEEP_LAYERS) * 2.2), fig_height))
     all_bar_vals = []
     first_bar = {k: True for k in model_dfs}
 
@@ -178,8 +179,12 @@ def plot_comparison(attr: str, model_dfs: dict, event_type: str, method: str,
             _annotate_bar(ax, xpos, bar_val, annot_val, secondary_col)
 
     ymin = min(0.0, (min(all_bar_vals) - 0.08)) if all_bar_vals else -0.1
-    # Extra headroom for the vertical r²/r annotations above each bar.
-    ymax = (max(all_bar_vals) + 0.26) if all_bar_vals else 1.0
+    # Fixed top (e.g. 1.0) gives the legend clear room above the vertical r²/r
+    # annotations on tall bars; otherwise auto headroom above the bars.
+    if ymax_fixed is not None:
+        ymax = ymax_fixed
+    else:
+        ymax = (max(all_bar_vals) + 0.26) if all_bar_vals else 1.0
     ax.set_ylim(ymin, ymax)
     ax.axhline(0, color="black", linewidth=0.8, linestyle="--", zorder=0)
     ax.set_xticks(x)
@@ -227,6 +232,10 @@ def main():
     parser.add_argument("--event-types", nargs="+", default=DEFAULT_EVENT_TYPES)
     parser.add_argument("--attributes",  nargs="+", default=DEFAULT_ATTRIBUTES)
     parser.add_argument("--out-dir",     default=os.path.join(str(config.OUT_DIR), "probe_comparison"))
+    parser.add_argument("--ymax",        type=float, default=None,
+                        help="Fixed y-axis top (e.g. 1.0) so the legend clears the bar annotations.")
+    parser.add_argument("--fig-height",  type=float, default=5.0,
+                        help="Figure height in inches (taller gives the legend more room).")
     args = parser.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
@@ -260,7 +269,8 @@ def main():
 
                     png = plot_comparison(attr, model_dfs, event_type, method,
                                           primary_col, secondary_col, ylabel,
-                                          args.out_dir, fname_prefix=f"{group}_")
+                                          args.out_dir, fname_prefix=f"{group}_",
+                                          ymax_fixed=args.ymax, fig_height=args.fig_height)
                     png_paths.append(png)
 
             if png_paths:

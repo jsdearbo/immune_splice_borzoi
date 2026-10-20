@@ -20,9 +20,9 @@ via environment variables). See **Finishing the port** below for the known gap.
 | **Fig 2A–C** (single-cell-type prediction) | `prediction_bars.py` | model stats + ridge baselines (`BASELINE_SUMMARY`) + pretrained summary | CPU-only replot from saved metrics. `eval_scatter.py` is the inference source that produced those metrics (and Appendix Fig A3). |
 | **Fig 2D–E** (multitask compression) | `multitask_collapse.py` | per-event pred TSVs (`EXPERIMENTS_ROOT`) | Correlation matrices + observed-vs-predicted PSI range; emits PNG + PDF. |
 | **Fig 2** final composite | `compose_figure2.tex` | panel PDFs above | `pdflatex compose_figure2.tex`. |
-| **Fig 3A–B** (UMAP: pretrained / adapted) | `../scripts/03_umap.py` | embeddings (`UMAP_RUN_ROOT`) | Produced by the clean pipeline, run per model. |
+| **Fig 3A–B** (UMAP grids: pretrained / adapted) | `umap_grid.py` | embeddings (`UMAP_RUN_ROOT`) | Compact grid per model (shared colorbar/row, no ticks); seeded, CPU. `../scripts/03_umap.py` still emits the per-panel UMAPs for Appendix A4–A5. |
 | **Fig 3C–D** (KNN probe bars) | `probe_comparison.py` | probe CSVs (`UMAP_RUN_ROOT`, `PRETRAINED_UMAP_ROOT`) | Also emits Appendix Figs A6–A7. |
-| **Fig 3E** (frozen-trunk UMAP) | `../scripts/03_umap.py` | frozen-model embeddings | Same script, `frozen_*` run dirs. |
+| **Fig 3E** (frozen-trunk UMAP grid) | `umap_grid.py --layers head_shared` | frozen-model embeddings | Same script, `frozen_*` run dir. |
 | **Fig 3F** (LoCon vs frozen, by probe) | `locon_vs_frozen_probe.py` | probe CSVs (`UMAP_RUN_ROOT`) | New for the revision. |
 | **Fig 3** final composite | `compose_figure3.tex` | panel PDFs/PNGs above | `pdflatex compose_figure3.tex`. |
 | **Appendix A1** (model schematic) | — | — | Illustrative schematic, assembled manually (not analysis code). |

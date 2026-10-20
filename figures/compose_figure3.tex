@@ -4,74 +4,61 @@
 % Manuscript figure-generation code for "Learning and probing sequence
 % representations of immune cell alternative splicing" (MLCB 2026 / PMLR).
 %
-% Rebuilt from legible, restyled panels (figstyle-based) rather than the former
-% hand-assembled mlcb_fig_3.pdf. Same 6-panel arrangement:
-%   A  pretrained UMAPs      (2 rows: donor_score / PSI; 3 trunk layers)
-%   B  LoCon-adapted UMAPs   (2 rows; 4 layers incl. the new decoder head)
-%   C  donor-score KNN probe bars (pretrained + 3 LoCon cell types)
+% UMAP panels A/B/E are compact grids (umap_grid.py: shared colorbar per row,
+% no axis ticks, bold layer/attribute labels); probe panels C/D/F are the
+% restyled bar charts. All six panels are legible, figstyle-styled, and
+% composited programmatically (no hand-assembled mlcb_fig_3.pdf).
+%   A  pretrained UMAP grid        (rows donor_score / PSI; 3 trunk layers)
+%   B  LoCon-adapted UMAP grid     (+ the new decoder head column)
+%   C  donor-score KNN probe bars
 %   D  PSI KNN probe bars
-%   E  frozen-trunk head-only UMAPs (donor_score / PSI) -- Reviewer 3 request
+%   E  frozen-trunk head-only UMAP grid (Reviewer 3 request)
 %   F  LoCon vs frozen-trunk PSI accessibility by probe type
-% UMAP panels regenerated via scripts/03_umap.py (seeded; no GPU); probe panels
-% via probe_comparison.py / locon_vs_frozen_probe.py. Panel files staged flat
-% into out/fig3/ (see make_figures.sh).
+% Panel files staged flat into out/fig3/ (see make_figures.sh).
 % Run: pdflatex -interaction=nonstopmode compose_figure3.tex
 \documentclass[preview,border=4pt]{standalone}
 \usepackage{graphicx}
 \setlength{\parindent}{0pt}
-\newcommand{\PanL}[1]{\textbf{\Large #1}\par\vspace{3pt}}
+% Panel letters sized so that, after this 15in figure is scaled to \linewidth
+% (~0.43x), they match the ~12pt letters of the other figures. Uniform A-F.
+\newcommand{\PanL}[1]{{\fontsize{28}{32}\selectfont\textbf{#1}}\par\vspace{5pt}}
 \begin{document}
 \begin{minipage}{15in}
 
-% ── Row 1: UMAP grids (A pretrained 2x3 | B LoCon 2x4) ────────────────────
+% ── Row 1: UMAP grids (A pretrained | B LoCon-adapted), equal cell size ────
 \noindent
-\begin{minipage}[t]{0.44\linewidth}
+\begin{minipage}[t]{0.43\linewidth}
 \PanL{A}
-\includegraphics[width=0.325\linewidth]{out/fig3/A_pre_donor_conv.png}\hfill
-\includegraphics[width=0.325\linewidth]{out/fig3/A_pre_donor_tran.png}\hfill
-\includegraphics[width=0.325\linewidth]{out/fig3/A_pre_donor_fcon.png}\\[3pt]
-\includegraphics[width=0.325\linewidth]{out/fig3/A_pre_psi_conv.png}\hfill
-\includegraphics[width=0.325\linewidth]{out/fig3/A_pre_psi_tran.png}\hfill
-\includegraphics[width=0.325\linewidth]{out/fig3/A_pre_psi_fcon.png}
-\end{minipage}%
-\hfill
-\begin{minipage}[t]{0.54\linewidth}
+\includegraphics[width=\linewidth]{out/fig3/A_grid.pdf}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.56\linewidth}
 \PanL{B}
-\includegraphics[width=0.24\linewidth]{out/fig3/B_loc_donor_conv.png}\hfill
-\includegraphics[width=0.24\linewidth]{out/fig3/B_loc_donor_tran.png}\hfill
-\includegraphics[width=0.24\linewidth]{out/fig3/B_loc_donor_fcon.png}\hfill
-\includegraphics[width=0.24\linewidth]{out/fig3/B_loc_donor_head.png}\\[3pt]
-\includegraphics[width=0.24\linewidth]{out/fig3/B_loc_psi_conv.png}\hfill
-\includegraphics[width=0.24\linewidth]{out/fig3/B_loc_psi_tran.png}\hfill
-\includegraphics[width=0.24\linewidth]{out/fig3/B_loc_psi_fcon.png}\hfill
-\includegraphics[width=0.24\linewidth]{out/fig3/B_loc_psi_head.png}
+\includegraphics[width=\linewidth]{out/fig3/B_grid.pdf}
 \end{minipage}
 
-\vspace{14pt}
+\vspace{20pt}
 
 % ── Row 2: KNN probe bars (C donor-score | D PSI) ─────────────────────────
 \noindent
 \begin{minipage}[t]{0.49\linewidth}
 \PanL{C}
 \includegraphics[width=\linewidth]{out/fig3/C_donor_probe.png}
-\end{minipage}%
-\hfill
+\end{minipage}\hfill
 \begin{minipage}[t]{0.49\linewidth}
 \PanL{D}
 \includegraphics[width=\linewidth]{out/fig3/D_psi_probe.png}
 \end{minipage}
 
-\vspace{14pt}
+\vspace{20pt}
 
-% ── Row 3: frozen-trunk UMAPs (E) | LoCon-vs-frozen probe (F) ─────────────
+% ── Row 3: frozen-trunk UMAP grid (E) | LoCon-vs-frozen probe (F) ─────────
+% top-aligned so E sits level with F (no gap above E).
 \noindent
-\begin{minipage}[b]{0.22\linewidth}
+\begin{minipage}[t]{0.23\linewidth}
 \PanL{E}
-\includegraphics[width=\linewidth]{out/fig3/E_froz_donor.png}\\[3pt]
-\includegraphics[width=\linewidth]{out/fig3/E_froz_psi.png}
-\end{minipage}%
-\hfill
-\begin{minipage}[b]{0.76\linewidth}
+\includegraphics[width=\linewidth]{out/fig3/E_grid.pdf}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.75\linewidth}
 \PanL{F}
 \includegraphics[width=\linewidth]{out/fig3/F_locon_vs_frozen.pdf}
 \end{minipage}
