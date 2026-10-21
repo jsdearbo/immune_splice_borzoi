@@ -81,15 +81,18 @@ def layer_coords(npz, layers, cache_path):
 
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-    figstyle.apply()
 
     ap = argparse.ArgumentParser(description="Compact UMAP grid for a model (Fig 3 A/B/E)")
     ap.add_argument("--embeddings", required=True, help="embeddings.npz")
     ap.add_argument("--in", dest="input", default=None, help="label table (default input_dedup.csv beside embeddings)")
     ap.add_argument("--layers", nargs="+", default=None, help="layers/columns (default: KEEP_LAYERS present)")
     ap.add_argument("--cell", type=float, default=2.0, help="inches per grid cell (native)")
+    ap.add_argument("--poster", action="store_true", help="larger fonts for poster viewing distance")
+    ap.add_argument("--dpi", type=int, default=200, help="output raster DPI (use >=300 for poster PNGs)")
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
+
+    figstyle.apply(poster=args.poster)
 
     npz = np.load(args.embeddings)
     label_csv = args.input or os.path.join(os.path.dirname(args.embeddings), "input_dedup.csv")
@@ -124,7 +127,7 @@ def main():
         cb = fig.colorbar(sc, ax=axes[i].tolist(), fraction=0.035, pad=0.012)
         cb.outline.set_linewidth(0.5)
 
-    fig.savefig(args.out, bbox_inches="tight", dpi=200)
+    fig.savefig(args.out, bbox_inches="tight", dpi=args.dpi)
     plt.close(fig)
     logging.info(f"Saved -> {args.out}")
 

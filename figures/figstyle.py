@@ -35,15 +35,21 @@ ATTR_LABELS = {
 }
 
 
-def apply(compact=False):
+def apply(compact=False, poster=False):
     """Install the shared, legible font scale into matplotlib's rcParams.
 
     compact=True uses a smaller, tuned scale for dense multi-panel figures
     (e.g. Figure 1's genome-track and 4-up distribution panels), which are
     wide and get downscaled in the LaTeX composite; the default scale suits
     the Figure 2/3 panels that composite closer to 1:1.
+
+    poster=True uses a larger scale for conference-poster assets, viewed at
+    ~1-1.5 m rather than on a journal page; it takes precedence over compact.
+    Manuscript figures never pass poster=True, so their output is unchanged.
     """
-    if compact:
+    if poster:
+        s = dict(base=15, title=19, label=17, tick=15, legend=14, figtitle=22)
+    elif compact:
         s = dict(base=10, title=11, label=10.5, tick=9.5, legend=9, figtitle=12)
     else:
         s = dict(base=12, title=14, label=13, tick=12, legend=11, figtitle=15)

@@ -156,7 +156,8 @@ def _annotate_bar(ax, x_center, bar_val, annot_val, annot_col):
 def plot_comparison(attr: str, model_dfs: dict, event_type: str, method: str,
                     primary_col: str, secondary_col: str, ylabel: str,
                     out_dir: str, fname_prefix: str = "",
-                    ymax_fixed: "float | None" = None, fig_height: float = 5.0) -> str:
+                    ymax_fixed: "float | None" = None, fig_height: float = 5.0,
+                    dpi: int = 150) -> str:
     n_models = len(model_dfs)
     x = np.arange(len(KEEP_LAYERS))
     offsets = np.linspace(-(n_models - 1) / 2, (n_models - 1) / 2, n_models) * BAR_WIDTH
@@ -199,7 +200,7 @@ def plot_comparison(attr: str, model_dfs: dict, event_type: str, method: str,
     plt.tight_layout()
 
     out_path = os.path.join(out_dir, f"{fname_prefix}{attr}_{event_type}_{method}.png")
-    plt.savefig(out_path, dpi=150, bbox_inches="tight")
+    plt.savefig(out_path, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
     logging.info(f"  Saved -> {out_path}")
     return out_path
@@ -224,7 +225,6 @@ def make_pdf(png_paths: list, pdf_path: str):
 
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-    figstyle.apply()
 
     parser = argparse.ArgumentParser(description="Probe comparison plots (KNN/linear across models)")
     parser.add_argument("--group",       choices=["locon", "frozen", "both"], default="both")
@@ -236,8 +236,13 @@ def main():
                         help="Fixed y-axis top (e.g. 1.0) so the legend clears the bar annotations.")
     parser.add_argument("--fig-height",  type=float, default=5.0,
                         help="Figure height in inches (taller gives the legend more room).")
+    parser.add_argument("--poster",      action="store_true",
+                        help="Larger fonts for poster viewing distance.")
+    parser.add_argument("--dpi",         type=int, default=150,
+                        help="Output raster DPI (use >=300 for poster PNGs).")
     args = parser.parse_args()
 
+    figstyle.apply(poster=args.poster)
     os.makedirs(args.out_dir, exist_ok=True)
 
     groups  = ["locon", "frozen"] if args.group  == "both" else [args.group]
@@ -270,7 +275,8 @@ def main():
                     png = plot_comparison(attr, model_dfs, event_type, method,
                                           primary_col, secondary_col, ylabel,
                                           args.out_dir, fname_prefix=f"{group}_",
-                                          ymax_fixed=args.ymax, fig_height=args.fig_height)
+                                          ymax_fixed=args.ymax, fig_height=args.fig_height,
+                                          dpi=args.dpi)
                     png_paths.append(png)
 
             if png_paths:
