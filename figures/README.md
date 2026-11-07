@@ -10,7 +10,8 @@ repo [`Imm_cell_rMATS`](https://github.com/jsdearbo/Imm_cell_rMATS), and turn
 them into the manuscript's figures and tables.
 
 All run-output locations are centralized in [`config.py`](config.py) (overridable
-via environment variables). See **Finishing the port** below for the known gap.
+via environment variables). See **Reproducing from the archive** below for the
+one remaining step (pointing `config.py` at the public deposit).
 
 ## Figure / table → code map
 
@@ -32,7 +33,8 @@ via environment variables). See **Finishing the port** below for the known gap.
 | **Appendix A6–A7** (probe bars / linear) | `probe_comparison.py` | probe CSVs | |
 | **Appendix A8** (Ptprc collapse) | `../scripts/01_eval_finetuned.py` | gene-track preds | Gene-of-interest track plot. |
 | **Appendix A9–A11** (motifs) | `../scripts/05–06` + eLife companion | attributions | Attribution → TF-MoDISco → FIMO. |
-| **Appendix Table A2** (4-config comparison) | `consolidated_comparison_table.py` | per-event pred TSVs (`EXPERIMENTS_ROOT`, `PRETRAINED_EVAL_ROOT`) | Bootstrap 95% CIs + effect sizes. |
+| **Appendix Table A2** (4-config comparison) | `consolidated_comparison_table.py` | per-event pred TSVs (`EXPERIMENTS_ROOT`, `PRETRAINED_EVAL_ROOT`) | Per-config bootstrap 95% CIs (main table) + **paired** Δr effect sizes on common events (LoCon/Frozen/Pretrained, each pair joined on event_key). |
+| **Fig 1C event-level companion** (Results/Discussion stat) | `event_level_psi_fraction.py` | solo rMATS tables (`RMATS_RESULTS`) | Event-level PSI distribution (~18% intermediate under the ≥20-read filter) vs the bin-level Fig 1C (~1–2%). CPU-only. |
 
 Pretrained-Borzoi zero-shot per-event predictions (needed by Table A2) are
 produced by `eval_pretrained_borzoi.py` → `PRETRAINED_EVAL_ROOT`.
@@ -44,6 +46,7 @@ conda activate immune-splice-borzoi      # same env as the model pipeline
 python figures/config.py                 # sanity-check that data paths resolve
 python figures/multitask_collapse.py --ft-type locon
 python figures/consolidated_comparison_table.py --n-boot 2000
+python figures/event_level_psi_fraction.py
 python figures/locon_vs_frozen_probe.py
 python figures/probe_comparison.py --group both --method both
 pdflatex figures/compose_figure3.tex
@@ -53,20 +56,27 @@ Outputs land in `figures/out/` (git-ignored). `eval_scatter.py` /
 `eval_pretrained_borzoi.py` require model checkpoints + a GPU (they run
 inference); the rest only read saved run outputs and are CPU-only.
 
-## Finishing the port (known gap)
+## Reproducing from the archive
 
-This is a **scaffold**. Each script was copied verbatim from the scratch repos
-(provenance in each file's header banner) and still defines its data paths as
-local constants. To make the release self-contained:
+**Path routing is complete.** Every assembly script in this directory resolves
+its data locations through [`config.py`](config.py) (no hardcoded data paths
+remain — the former `_EXPT_BASE` / `_RUN_ROOT` / `PRETRAINED_DIR` / `RMATS_BASE`
+constants are now thin aliases over `config.*`), and the model-pipeline scripts
+in [`../scripts/`](../scripts) take every path as an explicit CLI argument
+(`--config`, `--ckpt`, `--embeddings`, `--genome`, …). `python figures/config.py`
+prints each resolved root and whether it currently exists.
 
-1. **Route paths through `config.py`** — replace the hardcoded `_EXPT_BASE` /
-   `_RUN_ROOT` / `PRETRAINED_DIR` / `RMATS_BASE` / etc. constants in each script
-   with imports from `config.py`. `config.py` already enumerates every root.
-2. **Archive the run outputs to Zenodo** and set the `config.py` defaults (or
-   documented env vars) to the deposited layout, so the scripts reproduce the
-   figures from public data rather than the dev-server scratch dirs.
-3. **Pin versions** — the figures in the paper were built at a specific commit;
-   tag it and record the tag/DOI in the manuscript's Code Availability statement.
+Two steps remain to make the release fully self-contained from public data:
+
+1. **Point `config.py` at the deposit.** `config.py` resolves each root in the
+   order `SB_<NAME>` env var → `SB_DATA_ROOT`/`_LAYOUT` → dev-server default.
+   Once the run outputs are deposited, set `SB_DATA_ROOT` to the unpacked archive
+   (or individual `SB_<NAME>` vars) and the scripts reproduce the figures from
+   public data rather than the dev-server scratch dirs. Adjust `_LAYOUT` in
+   `config.py` if the deposit uses different folder names.
+2. **Pin versions** — the figures in the paper were built at a specific commit;
+   tag it and record the tag/DOI in the manuscript's Code Availability statement
+   (Zenodo deposit [`10.5281/zenodo.23442182`](https://doi.org/10.5281/zenodo.23442182)).
 
 ## Honesty notes (reproducibility scope)
 
