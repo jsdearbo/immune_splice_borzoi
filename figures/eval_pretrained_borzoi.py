@@ -6,8 +6,8 @@
 # representations of immune cell alternative splicing" (MLCB 2026 / PMLR).
 #
 # Ported from: JD_build/fine_tuning/npz_testing/eval_pretrained_borzoi.py
-# Data inputs: run outputs under the paths in figures/config.py (currently
-#   hardcoded in this script -- see figures/README.md 'Finishing the port').
+# Data inputs: all run-output locations resolve through figures/config.py
+#   (see figures/README.md "Reproducing from the archive").
 # ===========================================================================
 """
 eval_pretrained_borzoi.py
