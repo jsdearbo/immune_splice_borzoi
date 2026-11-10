@@ -19,7 +19,7 @@ The pipeline is organized as a sequence of numbered scripts:
 | 03 | `scripts/03_umap.py` | CPU: UMAP scatter plots from saved embeddings |
 | 04 | `scripts/04_probe.py` | Linear/KNN probe analysis to decode splicing attributes by layer |
 | 05 | `scripts/05_attribution_prep.py` | Prepare event CSV for attribution pipeline |
-| 06 | `scripts/06_attribution.sh` | Attribution + MoDISco + FIMO enrichment (calls eLife companion repo) |
+| 06 | `scripts/06_attribution.sh` | Attribution + MoDISco + FIMO enrichment (calls companion repo) |
 
 ## Requirements
 
@@ -36,7 +36,7 @@ This repo depends on two companion repos:
 
 1. **[Imm_cell_rMATS](https://github.com/jsdearbo/Imm_cell_rMATS)** — generates NPZ training shards from RNA-seq BAMs. Run this first to produce the `target_tsv_base_path` used by step 00.
 
-2. **[elife_delay_splice](https://github.com/jsdearbo/elife_delay_splice)** — provides attribution, MoDISco, and FIMO enrichment scripts used by step 06. Clone it alongside this repo and pass its path via `--elife-repo`.
+2. **[programmed_delayed_splicing](https://github.com/jsdearbo/programmed_delayed_splicing)** — provides attribution, MoDISco, and FIMO enrichment scripts used by step 06. Clone it alongside this repo and pass its path via `--attribution-repo`.
 
 ## Installation
 
@@ -47,10 +47,10 @@ conda env create -f environment.yml
 conda activate immune-splice-borzoi
 ```
 
-Also clone the eLife companion repo if you plan to run the attribution analysis:
+Also clone the attribution companion repo if you plan to run the attribution analysis:
 
 ```bash
-git clone https://github.com/jsdearbo/elife_delay_splice
+git clone https://github.com/jsdearbo/programmed_delayed_splicing
 ```
 
 ## Usage
@@ -109,7 +109,7 @@ python scripts/04_probe.py \
 
 ### 6. Attribution analysis
 
-Requires the eLife companion repo. First prepare the event CSV:
+Requires the attribution companion repo. First prepare the event CSV:
 
 ```bash
 python scripts/05_attribution_prep.py \
@@ -127,7 +127,7 @@ bash scripts/06_attribution.sh \
     --run-name B_cell_SE \
     --config manuscript_runs/configs/locon_B_cell_SE.yaml \
     --input-csv ./SE_results/input_dedup.csv \
-    --elife-repo /path/to/elife_delay_splice \
+    --attribution-repo /path/to/programmed_delayed_splicing \
     --out-dir ./attribution_runs \
     --cuda-device 0
 ```

@@ -5,20 +5,20 @@ set -euo pipefail
 #
 # This script orchestrates four steps:
 #   05_attribution_prep.py  — filter input_dedup.csv and add PSI bins  (local)
-#   01_get_attributions.py  — integrated-gradients attributions         (eLife repo)
-#   02_run_modisco.py       — de novo motif discovery                    (eLife repo)
-#   03_run_enrichment.py    — FIMO enrichment comparison                 (eLife repo)
+#   01_get_attributions.py  — integrated-gradients attributions         (companion repo)
+#   02_run_modisco.py       — de novo motif discovery                    (companion repo)
+#   03_run_enrichment.py    — FIMO enrichment comparison                 (companion repo)
 #
-# Steps 01–03 are delegated to a local clone of the eLife companion repo
-# (https://github.com/jsdearbo/elife_delay_splice). Pass its path with
-# --elife-repo or set ELIFE_REPO in your environment.
+# Steps 01–03 are delegated to a local clone of the companion repo
+# (https://github.com/jsdearbo/programmed_delayed_splicing). Pass its path with
+# --attribution-repo or set ATTRIBUTION_REPO in your environment.
 #
 # Usage:
 #   bash 06_attribution.sh \
 #       --run-name B_cell_SE \
 #       --config   ../manuscript_runs/configs/B_cell_SE.yaml \
 #       --input-csv /path/to/SE_results/input_dedup.csv \
-#       --elife-repo /path/to/elife_delay_splice \
+#       --attribution-repo /path/to/programmed_delayed_splicing \
 #       [--out-dir ./attribution_runs] \
 #       [--cuda-device 0] \
 #       [--psi-thresholds 0.5 0.95] \
@@ -36,7 +36,7 @@ RUN_NAME=""
 CONFIG=""
 INPUT_CSV=""
 OUT_DIR="${REPO_ROOT}/attribution_runs"
-ELIFE_REPO="${ELIFE_REPO:-}"
+ATTRIBUTION_REPO="${ATTRIBUTION_REPO:-}"
 CUDA_DEVICE=0
 EVENTS_PER_BIN=100
 PSI_THRESHOLDS=""
@@ -54,7 +54,7 @@ while [[ $# -gt 0 ]]; do
         --config)             CONFIG="$2";              shift 2 ;;
         --input-csv)          INPUT_CSV="$2";           shift 2 ;;
         --out-dir)            OUT_DIR="$2";             shift 2 ;;
-        --elife-repo)         ELIFE_REPO="$2";          shift 2 ;;
+        --attribution-repo)         ATTRIBUTION_REPO="$2";          shift 2 ;;
         --cuda-device)        CUDA_DEVICE="$2";         shift 2 ;;
         --events-per-bin)     EVENTS_PER_BIN="$2";     shift 2 ;;
         --psi-thresholds)     PSI_THRESHOLDS="$2 $3";  shift 3 ;;
@@ -78,13 +78,13 @@ fi
 if [[ -z "$INPUT_CSV" ]]; then
     echo "ERROR: --input-csv is required (path to input_dedup.csv from 02_extract_embeddings step)" >&2; exit 1
 fi
-if [[ -z "$ELIFE_REPO" ]]; then
-    echo "ERROR: --elife-repo is required (path to local clone of elife_delay_splice repo)" >&2
-    echo "       Clone it with: git clone https://github.com/jsdearbo/elife_delay_splice" >&2
+if [[ -z "$ATTRIBUTION_REPO" ]]; then
+    echo "ERROR: --attribution-repo is required (path to local clone of programmed_delayed_splicing repo)" >&2
+    echo "       Clone it with: git clone https://github.com/jsdearbo/programmed_delayed_splicing" >&2
     exit 1
 fi
-if [[ ! -d "$ELIFE_REPO" ]]; then
-    echo "ERROR: eLife repo not found at: $ELIFE_REPO" >&2; exit 1
+if [[ ! -d "$ATTRIBUTION_REPO" ]]; then
+    echo "ERROR: companion repo not found at: $ATTRIBUTION_REPO" >&2; exit 1
 fi
 if [[ ! -f "$CONFIG" ]]; then
     echo "ERROR: config not found: $CONFIG" >&2; exit 1
@@ -97,8 +97,8 @@ mkdir -p "$RUN_DIR"
 EVENT_TYPE="${RUN_NAME##*_}"
 CELL_TYPE="${RUN_NAME%_*}"
 
-# Expose this repo's utils/ and eLife's utils/ package on PYTHONPATH
-export PYTHONPATH="${ELIFE_REPO}:${UTILS_DIR}:${PYTHONPATH:-}"
+# Expose this repo's utils/ and the companion repo's utils/ package on PYTHONPATH
+export PYTHONPATH="${ATTRIBUTION_REPO}:${UTILS_DIR}:${PYTHONPATH:-}"
 
 echo "============================================================"
 echo " Attribution Pipeline: ${RUN_NAME}"
@@ -107,7 +107,7 @@ echo " run dir       : ${RUN_DIR}"
 echo " input CSV     : ${INPUT_CSV}"
 echo " cell type     : ${CELL_TYPE}"
 echo " event type    : ${EVENT_TYPE}"
-echo " eLife repo    : ${ELIFE_REPO}"
+echo " companion repo: ${ATTRIBUTION_REPO}"
 echo " cuda device   : ${CUDA_DEVICE}"
 echo " events/bin    : ${EVENTS_PER_BIN}"
 echo "============================================================"
@@ -144,7 +144,7 @@ else
     echo ""
     echo "── Step 01: Attributions (GPU, device ${CUDA_DEVICE}) ───────────────────"
     CUDA_VISIBLE_DEVICES="${CUDA_DEVICE}" \
-    python "${ELIFE_REPO}/scripts/01_get_attributions.py" \
+    python "${ATTRIBUTION_REPO}/scripts/01_get_attributions.py" \
         --config "${CONFIG}"
 fi
 
@@ -154,7 +154,7 @@ if [[ $SKIP_MODISCO -eq 1 && -d "${RUN_DIR}/all_seqs_modisco" ]]; then
 else
     echo ""
     echo "── Step 02: MoDISco ─────────────────────────────────────────────────────"
-    python "${ELIFE_REPO}/scripts/02_run_modisco.py" \
+    python "${ATTRIBUTION_REPO}/scripts/02_run_modisco.py" \
         --config "${CONFIG}"
 fi
 
@@ -164,7 +164,7 @@ if [[ $SKIP_ENRICHMENT -eq 1 && -d "${RUN_DIR}/enrichment" ]]; then
 else
     echo ""
     echo "── Step 03: FIMO enrichment ─────────────────────────────────────────────"
-    python "${ELIFE_REPO}/scripts/03_run_enrichment.py" \
+    python "${ATTRIBUTION_REPO}/scripts/03_run_enrichment.py" \
         --config "${CONFIG}"
 fi
 
@@ -172,7 +172,7 @@ fi
 if [[ $RUN_MOTIF_MAPS -eq 1 ]]; then
     echo ""
     echo "── Step 04: Motif maps ──────────────────────────────────────────────────"
-    python "${ELIFE_REPO}/scripts/04_map_motifs.py" \
+    python "${ATTRIBUTION_REPO}/scripts/04_map_motifs.py" \
         --config "${CONFIG}"
 fi
 

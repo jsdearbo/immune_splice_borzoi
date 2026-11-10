@@ -2,7 +2,7 @@
 Prepare an attribution-ready CSV from input_dedup.csv.
 
 Filters to a specific cell type and event type, renames columns to match the
-eLife attribution pipeline's expected format, synthesizes a unique_ID field,
+attribution pipeline's expected format, synthesizes a unique_ID field,
 and adds a psi_bin column for use as the groupby_column in 02_run_modisco.py
 and 03_run_enrichment.py.
 

@@ -32,7 +32,7 @@ one remaining step (pointing `config.py` at the public deposit).
 | **Appendix A4–A5** (UMAP attr maps) | `../scripts/03_umap.py` | embeddings | |
 | **Appendix A6–A7** (probe bars / linear) | `probe_comparison.py` | probe CSVs | |
 | **Appendix A8** (Ptprc collapse) | `../scripts/01_eval_finetuned.py` | gene-track preds | Gene-of-interest track plot. |
-| **Appendix A9–A11** (motifs) | `../scripts/05–06` + eLife companion | attributions | Attribution → TF-MoDISco → FIMO. |
+| **Appendix A9–A11** (motifs) | `../scripts/05–06` + companion repo | attributions | Attribution → TF-MoDISco → FIMO. |
 | **Appendix Table A2** (4-config comparison) | `consolidated_comparison_table.py` | per-event pred TSVs (`EXPERIMENTS_ROOT`, `PRETRAINED_EVAL_ROOT`) | Per-config bootstrap 95% CIs (main table) + **paired** Δr effect sizes on common events (LoCon/Frozen/Pretrained, each pair joined on event_key). |
 | **Fig 1C event-level companion** (Results/Discussion stat) | `event_level_psi_fraction.py` | solo rMATS tables (`RMATS_RESULTS`) | Event-level PSI distribution (~18% intermediate under the ≥20-read filter) vs the bin-level Fig 1C (~1–2%). CPU-only. |
 

@@ -59,6 +59,6 @@ echo "                          copy to out/fig3/{C_donor_probe,D_psi_probe}.png
 echo "  Appendix A4-A5, A8    : ../scripts/03_umap.py, ../scripts/01_eval_finetuned.py"
 echo "  Fig 1, Appendix A2    : companion repo Imm_cell_rMATS/analysis/figure1/"
 echo "  Appendix A1 schematic : hand-made illustrative figure (not analysis; no script in the repo)"
-echo "  Appendix A9-A11       : ../scripts/05-06 + eLife companion (attribution/MoDISco/FIMO)"
+echo "  Appendix A9-A11       : ../scripts/05-06 + companion repo (attribution/MoDISco/FIMO)"
 echo "  Fig 1 / Fig 2 / Fig 3 : composited programmatically (compose_figure{1,2,3}.tex) --"
 echo "                          no Adobe Illustrator step."
